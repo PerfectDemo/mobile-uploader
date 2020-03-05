@@ -15,6 +15,7 @@ import RestoreIcon from '@material-ui/icons/Restore';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
+import SimpleList from './components/list';
 
 import { Context } from './context';
 
@@ -27,6 +28,9 @@ const useStyles = makeStyles(theme => ({
       },
       title: {
         flexGrow: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
       },
       stickToBottom: {
         position: "fixed",
@@ -45,13 +49,19 @@ export default function() {
                 <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                 <MenuIcon />
                 </IconButton>
-                <Typography variant="h6" className={classes.title}>
-                        ninja
-                </Typography>
+                <div className={classes.title}>
+                  <Typography variant="h6">
+                          ninja
+                  </Typography>
+                </div>
                 <Button color="inherit">Login</Button>
             </Toolbar>
             </AppBar>
-            <Container maxWidth="xl">xiba</Container>
+          
+            <SimpleList />
+
+
+          
             <BottomNavigation className={classes.stickToBottom}
                 // value={value}
                 // onChange={(event, newValue) => {
