@@ -1,16 +1,24 @@
 import React, { createContext, useState } from 'react';
 
+import Qiniu from './service/qiniu';
 
 export const Context = createContext({});
 
 export const Provider = (props) => {
     const { children } = props;
 
-    const [ selectedRecord, setSelectedRecord ] = useState(null);
+    const [ files, setFiles ] = useState([
+        { name: 'hello.txt', type: 'file', size: 4654564 },
+        { name: 'child', type: 'dir', size: 0 }
+      ]);
+    
+    const [ currentDir, setCurrentDir ] = useState('/');
 
     const context = {
-        selectedRecord,
-        setSelectedRecord
+        files,
+        setFiles,
+        currentDir, 
+        setCurrentDir
     };
 
     return (
