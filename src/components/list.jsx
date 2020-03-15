@@ -5,6 +5,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
+import Popover from '@material-ui/core/Popover';
+import Typography from '@material-ui/core/Typography';
 
 import FolderIcon from '@material-ui/icons/Folder';
 import ImageIcon from '@material-ui/icons/Image';
@@ -16,41 +18,77 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     backgroundColor: theme.palette.background.paper,
   },
+  typography: {
+    padding: theme.spacing(2),
+  },
 }));
 
 
 export default function SimpleList() {
-  const { files } = useContext(Context);
+  const { files, setCurrentDir } = useContext(Context);
   const classes = useStyles();
+
+  // pop
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
 
   return (
     <div className={classes.root}>
+      <Divider />
       <List component="nav" aria-label="main mailbox folders">
 
         { files.map(file => {
           if (file.type === 'file') {
-            return <>
-              <ListItem button>
+            return <React.Fragment>
+              <ListItem button onClick={handleClick}>
                   <ListItemIcon>
                     <ImageIcon />
                   </ListItemIcon>
                   <ListItemText primary={file.name} />
               </ListItem>
               <Divider />
-                  </>
+                  </React.Fragment>
           } else if (file.type === 'dir') {
-            return <>
-              <ListItem button>
-                <ListItemIcon>
-                  <FolderIcon />
-                </ListItemIcon>
-                <ListItemText primary={file.name} />
-              </ListItem>
-              <Divider />
-            </>
+            return <React.Fragment>
+                    <ListItem button onClick={() => setCurrentDir(file.name + '/')}>
+                    <ListItemIcon>
+                      <FolderIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={file.name} />
+                  </ListItem>
+                  <Divider />
+                </React.Fragment>
           }
         })}
       </List>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Typography className={classes.typography}>详情</Typography>
+        <Typography className={classes.typography}>下载</Typography>
+      </Popover>
     
      
     </div>
