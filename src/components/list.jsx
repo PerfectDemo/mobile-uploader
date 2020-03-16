@@ -11,6 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
 import ImageIcon from '@material-ui/icons/Image';
 
+import File from '../service/file';
+
 import { Context } from '../context';
 
 const useStyles = makeStyles(theme => ({
@@ -25,19 +27,20 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function SimpleList() {
-  const { files, setCurrentDir } = useContext(Context);
+  const { files, currentDir, setCurrentDir } = useContext(Context);
+  const [ seletedFile, setSelectedFile ] = useState('');
   const classes = useStyles();
 
   // pop
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleClick = event => {
-    setAnchorEl(event.currentTarget);
-  };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleDownload = function() {
+     File.downloadFile(currentDir, seletedFile).then(() => console.log('download!'));
+  }
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
@@ -51,7 +54,10 @@ export default function SimpleList() {
         { files.map(file => {
           if (file.type === 'file') {
             return <React.Fragment>
-              <ListItem button onClick={handleClick}>
+              <ListItem button onClick={(event) => {
+                  setAnchorEl(event.currentTarget);
+                  setSelectedFile(file.name);
+              }}>
                   <ListItemIcon>
                     <ImageIcon />
                   </ListItemIcon>
@@ -87,7 +93,7 @@ export default function SimpleList() {
         }}
       >
         <Typography className={classes.typography}>详情</Typography>
-        <Typography className={classes.typography}>下载</Typography>
+        <Typography className={classes.typography} onClick={ handleDownload }>下载</Typography>
       </Popover>
     
      

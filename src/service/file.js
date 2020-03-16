@@ -17,8 +17,27 @@ class FileService {
         return files;
     }
 
-    async readFile(file) {
+    async downloadFile(dir, file) {
+        const blob = await this.baseDownloadFileBlob(dir, file);
+        this.downloadBlob(blob, file); 
+    }
 
+    async baseDownloadFileBlob(dir, file) {
+        const filePath = this.ossUrl + dir + file;
+        console.log(filePath);
+        const response = await fetch(filePath);
+        const blob = await response.blob();
+        return blob;
+    }
+
+    downloadBlob(blob, fileName) {
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.download = fileName;
+        a.href = blobUrl;
+        a.click();
+        document.body.removeChild(a);
     }
 }
 
