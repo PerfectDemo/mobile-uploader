@@ -23,11 +23,15 @@ class FileService {
     }
 
     async baseDownloadFileBlob(dir, file) {
-        const filePath = this.ossUrl + dir + file;
+        const filePath = getDownloadUrl(dir, file)
         console.log(filePath);
         const response = await fetch(filePath);
         const blob = await response.blob();
         return blob;
+    }
+
+    getDownloadUrl(dir, file) {
+        return this.ossUrl + dir + file;
     }
 
     downloadBlob(blob, fileName) {

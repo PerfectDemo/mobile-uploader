@@ -12,6 +12,8 @@ import FolderIcon from '@material-ui/icons/Folder';
 import ImageIcon from '@material-ui/icons/Image';
 
 import File from '../service/file';
+import Qiniu from '../service/qiniu';
+import DetailDialog from './detail-dialog';
 
 import { Context } from '../context';
 
@@ -29,6 +31,8 @@ const useStyles = makeStyles(theme => ({
 export default function SimpleList() {
   const { files, currentDir, setCurrentDir } = useContext(Context);
   const [ seletedFile, setSelectedFile ] = useState('');
+  const [ detail, setDetail ] = useState({});
+  const [ dialogOpen, setDialogOpen ] = useState(false);
   const classes = useStyles();
 
   // pop
@@ -40,7 +44,18 @@ export default function SimpleList() {
 
   const handleDownload = function() {
      File.downloadFile(currentDir, seletedFile).then(() => console.log('download!'));
+  };
+
+  const handleDetail = function() {
+    Qiniu.stat(currentDir, seletedFile).then((res)=> {
+       setDetail(res);
+       setDialogOpen(true);
+    });
   }
+
+  const handleDialogClose = function() {
+      setDialogOpen(false);
+  };
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
@@ -92,9 +107,12 @@ export default function SimpleList() {
           horizontal: 'center',
         }}
       >
-        <Typography className={classes.typography}>详情</Typography>
+        <Typography className={classes.typography} onClick={ handleDetail }>详情</Typography>
         <Typography className={classes.typography} onClick={ handleDownload }>下载</Typography>
       </Popover>
+
+
+      <DetailDialog detail={detail} open={dialogOpen} onClose={ handleDialogClose }/>
     
      
     </div>

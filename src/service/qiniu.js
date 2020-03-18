@@ -1,4 +1,5 @@
 import CryptoJS  from "crypto-js";
+import File from './file';
 
 const getTimeStamp = () => (+new Date() / 1000).toFixed(0);
 
@@ -65,6 +66,17 @@ class Qiniu {
               'Content-Type': 'application/json'
             })
         }).then(res => res.json())
+    }
+
+    async stat(dir, file) {
+        const api = '/api/v1/stat';
+        const key = dir + file;
+        const paramObj = { key, bucket: this.bucket };
+        const paramStr = Object.keys(paramObj).map(key => `${key}=${paramObj[key]}`).join('&');
+        const response = await fetch(`${this.baseUrl}${api}?${paramStr}`);
+        const jsonResult = await response.json();
+        jsonResult.url = File.getDownloadUrl(dir, file);
+        return jsonResult;
     }
 }
 
