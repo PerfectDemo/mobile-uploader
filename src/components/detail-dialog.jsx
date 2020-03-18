@@ -15,12 +15,23 @@ import { convertSize } from '../utils/size';
 import { timeConvert } from '../utils/time';
 
 
+// overflow:hidden; //超出的文本隐藏
+// text-overflow:ellipsis; //溢出用省略号显示
+// white-space:nowrap; //溢出不换行
+
 const useStyles = makeStyles({
   avatar: {
     backgroundColor: blue[100],
     color: blue[600],
   },
+
+  listText: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap'
+  }
 });
+
 
 export default function DetailDialog(props) {
     const classes = useStyles();
@@ -33,16 +44,16 @@ export default function DetailDialog(props) {
             <Divider/>
             <List>
                 <ListItem button key={fsize}>
-                    <ListItemText primary={`size: ${convertSize(fsize)}`} />
+                    <ListItemText className={classes.listText} primary={`size: ${convertSize(fsize)}`} />
                 </ListItem>
                 <ListItem button key={mimeType}>
-                    <ListItemText primary={`mimeType: ${mimeType}`} />
+                    <ListItemText className={classes.listText} primary={`mimeType: ${mimeType}`} />
                 </ListItem>
                 <ListItem button key={putTime}>
-                    <ListItemText primary={`putTime: ${timeConvert(putTime / 10000000 | 0)}`} />
+                    <ListItemText className={classes.listText} primary={`putTime: ${timeConvert(putTime / 10000000 | 0)}`} />
                 </ListItem>
                 <ListItem button key={url}>
-                    <ListItemText primary={`url: ${url}`} />
+                    <ListItemText className={classes.listText} primary={`url: ${url}`} />
                 </ListItem>
             </List>
         </Dialog>
