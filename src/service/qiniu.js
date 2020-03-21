@@ -1,5 +1,7 @@
 import CryptoJS  from "crypto-js";
 import File from './file';
+import * as qiniu from 'qiniu-js';
+
 
 const getTimeStamp = () => (+new Date() / 1000).toFixed(0);
 
@@ -51,6 +53,7 @@ class Qiniu {
             "ts":  getTimeStamp()
         };
 
+        const appsecret = 'wryyyyyyyyy';
         const signStr = Object.keys(data).sort().map(key => `${key}=${data[key]}`).join('&');
         const sign = CryptoJS.HmacSHA1(signStr, appsecret).toString(CryptoJS.enc.Hex).toUpperCase();
         api = api + '?sign=' + sign;
@@ -78,6 +81,47 @@ class Qiniu {
         jsonResult.url = File.getDownloadUrl(dir, file);
         return jsonResult;
     }
+
+    async upload(file, key, putExtra, config) {
+        const tokenRaw = await this._getUploadPolicy();
+        const token = tokenRaw.token;
+        console.log('key:', key);
+        let observable = qiniu.upload(file, key, token, putExtra, config);
+
+        let subscription = observable.subscribe(function(res) {
+            console.log('[RES]:', res);
+        }, function(error) {
+            console.error('[ERROR]', error);
+        }, function(res) {
+            console.log('[SUCCESS]:', res);
+        }) 
+        
+        // 这样传参形式也可以
+        // subscription.unsubscribe() // 上传取消
+    }
+
+    async readDir(dir) {
+        // TODO: support marker
+        const query = {
+            bucket: this.bucket,
+            prefix: dir, 
+            delimiter: '/'
+        };
+
+        const api = '/api/v1/list?' + Object.keys(query).map(key => `${key}=${query[key]}`).join('&');
+        const result = await fetch(this.baseUrl + api);
+        const json = await result.json();
+        const files = json.items || [];
+        const dirs = json.commonPrefixes || [];
+
+        return [...dirs.map(dir => ({ type: 'dir', name: dir })), ...files.map(file => {
+            file.name = file.key;
+            file.type = 'file';
+            return file
+        })];
+    }
+
+
 }
 
 export default new Qiniu();

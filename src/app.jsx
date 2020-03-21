@@ -1,5 +1,8 @@
 
-import React, { useContext } from 'react';
+require('babel-polyfill');
+
+
+import React, { useContext, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,12 +12,11 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import UploadIcon from '@material-ui/icons/CloudUpload';
 
 
 import SimpleList from './components/list';
 import DirBreadCrumbs from './components/dir-bread-crumbs';
+import FileUploader from './components/file-upload';
 
 import { Context } from './context';
 
@@ -42,15 +44,16 @@ export default function() {
 
     const classes = useStyles();
     const { currentDir, setCurrentDir } = useContext(Context);
+    const [ files, setFiles ] = useState([]);
+  
+    const results = currentDir.split('/');
+    const front = results[results.length - 3] || '';
+    const title = results[results.length - 2];
 
-    const getTitle = (name) => {
-      const results = name.split('/');
-      console.log(name, results);
-      return [ results[results.length - 3] || '', results[results.length - 2]]
+    const handleUpload = (files) => {
+      console.log(files);
+      setFiles(files);
     }
-
-    const [ front, title ] = getTitle(currentDir);
-
     return (
         <div className={classes.root}>
             <AppBar position="static">
@@ -79,8 +82,9 @@ export default function() {
                 // showLabels
                 // className={classes.root}
                 >
-                <BottomNavigationAction label="Recents" icon={<UploadIcon />} />
+                <FileUploader />
             </BottomNavigation>
+            
         </div>     
     )
 }

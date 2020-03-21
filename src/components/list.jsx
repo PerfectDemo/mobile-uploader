@@ -14,6 +14,7 @@ import ImageIcon from '@material-ui/icons/Image';
 import File from '../service/file';
 import Qiniu from '../service/qiniu';
 import DetailDialog from './detail-dialog';
+import { getBaseName, getNearestDirName } from '../utils/file';
 
 import { Context } from '../context';
 
@@ -66,27 +67,27 @@ export default function SimpleList() {
       <Divider />
       <List component="nav" aria-label="main mailbox folders">
 
-        { files.map(file => {
+        { files.map((file, key) => {
           if (file.type === 'file') {
             return <React.Fragment>
-              <ListItem button onClick={(event) => {
+              <ListItem key={key} button onClick={(event) => {
                   setAnchorEl(event.currentTarget);
                   setSelectedFile(file.name);
               }}>
                   <ListItemIcon>
                     <ImageIcon />
                   </ListItemIcon>
-                  <ListItemText primary={file.name} />
+                  <ListItemText primary={ getBaseName(file.name) } />
               </ListItem>
               <Divider />
                   </React.Fragment>
           } else if (file.type === 'dir') {
             return <React.Fragment>
-                    <ListItem button onClick={() => setCurrentDir(file.name + '/')}>
-                    <ListItemIcon>
-                      <FolderIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={file.name} />
+                    <ListItem key={key} button onClick={() => setCurrentDir(file.name)}>
+                      <ListItemIcon>
+                        <FolderIcon />
+                      </ListItemIcon>
+                      <ListItemText primary={ getNearestDirName(file.name) } />
                   </ListItem>
                   <Divider />
                 </React.Fragment>

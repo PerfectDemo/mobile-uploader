@@ -16,8 +16,8 @@ export default function DirBreadCrumbs(props) {
     return (
         <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} className={props.dir ? classes.root : null } aria-label="breadcrumb">
         {
-            props.dir.split('/').map(childDir =>
-                <Link color="inherit" href="/">
+            props.dir.split('/').map((childDir,key) =>
+                <Link key={key} color="inherit" href="/">
                 {childDir}
                 </Link>)
         }  
