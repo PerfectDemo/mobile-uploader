@@ -16,6 +16,7 @@ export default function useFile() {
     return {
         files, 
         currentDir,
-        setCurrentDir
+        setCurrentDir,
+        readDir
     };
 }

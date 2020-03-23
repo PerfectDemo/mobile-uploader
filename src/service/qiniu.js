@@ -22,7 +22,13 @@ class Qiniu {
             }
         } 
 
-        let result = await this._getSign(this.baseUrl + '/api/v1/put-policy');
+        let result = await this._signRequest(this.baseUrl + '/api/v1/put-policy', {
+            "bucket": "ninja-notebook",
+            "expires": 7200,
+            "nonce": Math.random() * 10000 | 0,
+            "ts":  getTimeStamp()
+        });
+
         let timestamp = getTimeStamp() + (result.expires * 0.9 | 0);
         result.timestamp = timestamp;
         localStorage.setItem('put-policy', JSON.stringify(result));
@@ -39,20 +45,18 @@ class Qiniu {
             }
         } 
 
-        let result = await this._getSign(this.baseUrl + '/api/v1/overwrite-policy');
+        let result = await this._signRequest(this.baseUrl + '/api/v1/overwrite-policy', {
+            "bucket": "ninja-notebook",
+            "expires": 7200,
+            "nonce": Math.random() * 10000 | 0,
+            "ts":  getTimeStamp()
+        });
         let timestamp = getTimeStamp() + (result.expires * 0.9 | 0);
         result.timestamp = timestamp;
         localStorage.setItem('put-policy', JSON.stringify(result));
     }
 
-    async _getSign(api) {
-        const data ={
-            "bucket": "ninja-notebook",
-            "expires": 7200,
-            "nonce": Math.random() * 10000 | 0,
-            "ts":  getTimeStamp()
-        };
-
+    async _signRequest(api, data) {
         const appsecret = 'wryyyyyyyyy';
         const signStr = Object.keys(data).sort().map(key => `${key}=${data[key]}`).join('&');
         const sign = CryptoJS.HmacSHA1(signStr, appsecret).toString(CryptoJS.enc.Hex).toUpperCase();
@@ -119,6 +123,16 @@ class Qiniu {
             file.type = 'file';
             return file
         })];
+    }
+
+    async delete(key) {
+        const result = await this._signRequest(this.baseUrl + '/api/v1/delete', {
+            bucket: this.bucket,
+            key,
+            nonce: Math.random() * 10000 | 0,
+            ts:  getTimeStamp()
+        });
+        return result;
     }
 
 

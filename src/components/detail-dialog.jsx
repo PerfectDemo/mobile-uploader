@@ -36,13 +36,16 @@ const useStyles = makeStyles({
 export default function DetailDialog(props) {
     const classes = useStyles();
     const { onClose, detail, open } = props;
-    const { fsize, mimeType, putTime, url } = detail;
+    const { fsize, mimeType, putTime, key } = detail;
         
     return (
         <Dialog aria-labelledby="simple-dialog-title" open={open} onClose={onClose}>
             <DialogTitle id="simple-dialog-title">Detail</DialogTitle>
             <Divider/>
             <List>
+                <ListItem button key={key}>
+                    <ListItemText className={classes.listText} primary={`key: ${key}`} />
+                </ListItem>
                 <ListItem button key={fsize}>
                     <ListItemText className={classes.listText} primary={`size: ${convertSize(fsize)}`} />
                 </ListItem>
@@ -52,9 +55,7 @@ export default function DetailDialog(props) {
                 <ListItem button key={putTime}>
                     <ListItemText className={classes.listText} primary={`putTime: ${timeConvert(putTime / 10000000 | 0)}`} />
                 </ListItem>
-                <ListItem button key={url}>
-                    <ListItemText className={classes.listText} primary={`url: ${url}`} />
-                </ListItem>
+               
             </List>
         </Dialog>
     );

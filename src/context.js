@@ -1,7 +1,7 @@
 import React, { createContext, useState } from 'react';
 
-import Qiniu from './service/qiniu';
 import useFiles from './hooks/use-files';
+import useSnackBar from './hooks/use-snackbar';
 
 
 export const Context = createContext({});
@@ -9,12 +9,24 @@ export const Context = createContext({});
 export const Provider = (props) => {
     const { children } = props;
 
-    const { files, currentDir, setCurrentDir } = useFiles();
+    const { files, currentDir, setCurrentDir, readDir } = useFiles();
+    const {
+        snackBarOpen,
+        snackShow,
+        snackMessage,
+        snackHide
+    } = useSnackBar();
 
     const context = {
         files,
         currentDir, 
-        setCurrentDir
+        setCurrentDir,
+        readDir,
+
+        snackBarOpen,
+        snackShow,
+        snackMessage,
+        snackHide
     };
 
     return (

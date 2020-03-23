@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function SimpleList() {
-  const { files, currentDir, setCurrentDir } = useContext(Context);
+  const { files, currentDir, setCurrentDir, readDir, snackShow } = useContext(Context);
   const [ seletedFile, setSelectedFile ] = useState('');
   const [ detail, setDetail ] = useState({});
   const [ dialogOpen, setDialogOpen ] = useState(false);
@@ -44,19 +44,24 @@ export default function SimpleList() {
   };
 
   const handleDownload = function() {
-     File.downloadFile(currentDir, seletedFile).then(() => console.log('download!'));
+     File.downloadFile(seletedFile.key).then(() => console.log('download!'));
   };
 
   const handleDetail = function() {
-    Qiniu.stat(currentDir, seletedFile).then((res)=> {
-       setDetail(res);
-       setDialogOpen(true);
-    });
+      setDialogOpen(true);
   }
 
   const handleDialogClose = function() {
       setDialogOpen(false);
   };
+
+  const handleDelete = function() {
+      Qiniu.delete(seletedFile.key).then(() => {
+        setAnchorEl(null);
+        snackShow('删除成功!')
+        readDir();
+      });
+  }
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
@@ -68,16 +73,17 @@ export default function SimpleList() {
       <List component="nav" aria-label="main mailbox folders">
 
         { files.map((file, key) => {
-          if (file.type === 'file') {
+           const baseName = getBaseName(file.name)
+          if (file.type === 'file' && baseName !== '.keep') {
             return <React.Fragment>
               <ListItem key={key} button onClick={(event) => {
                   setAnchorEl(event.currentTarget);
-                  setSelectedFile(file.name);
+                  setSelectedFile(file);
               }}>
                   <ListItemIcon>
                     <ImageIcon />
                   </ListItemIcon>
-                  <ListItemText primary={ getBaseName(file.name) } />
+                  <ListItemText primary={ baseName } />
               </ListItem>
               <Divider />
                   </React.Fragment>
@@ -108,12 +114,13 @@ export default function SimpleList() {
           horizontal: 'center',
         }}
       >
-        <Typography className={classes.typography} onClick={ handleDetail }>详情</Typography>
-        <Typography className={classes.typography} onClick={ handleDownload }>下载</Typography>
+        <Typography button className={classes.typography} onClick={ handleDetail }>详情</Typography>
+        <Typography button className={classes.typography} onClick={ handleDownload }>下载</Typography>
+        <Typography button className={classes.typography} onClick={ handleDelete }>删除</Typography>
       </Popover>
 
 
-      <DetailDialog detail={detail} open={dialogOpen} onClose={ handleDialogClose }/>
+      <DetailDialog detail={seletedFile} open={dialogOpen} onClose={ handleDialogClose }/>
     
      
     </div>

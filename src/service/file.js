@@ -17,14 +17,13 @@ class FileService {
         return files;
     }
 
-    async downloadFile(dir, file) {
-        const blob = await this.baseDownloadFileBlob(dir, file);
+    async downloadFile(file) {
+        const blob = await this.baseDownloadFileBlob(file);
         this.downloadBlob(blob, file); 
     }
 
-    async baseDownloadFileBlob(dir, file) {
-        const filePath = getDownloadUrl(dir, file)
-        console.log(filePath);
+    async baseDownloadFileBlob(file) {
+        const filePath = this.ossUrl + file;
         const response = await fetch(filePath);
         const blob = await response.blob();
         return blob;

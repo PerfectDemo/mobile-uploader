@@ -68,7 +68,7 @@ const useStyles = makeStyles(() => ({
 
 export default function FileUploader(props) {
     const classes = useStyles();
-    const { currentDir } = useContext(Context);
+    const { currentDir, readDir } = useContext(Context);
     const [ file, setFile ] = useState({});
     const [ open, setOpen ] = useState(false);
     const [ defaultKey, setDefaultKey ] = useState('');
@@ -86,7 +86,7 @@ export default function FileUploader(props) {
         setOpen(false);
         const fileName = currentDir + keyName;
         console.log(fileName)
-        Qiniu.upload(file, fileName);
+        Qiniu.upload(file, fileName).then(() => setTimeout(() => readDir(), 1000));
         
     }
 
