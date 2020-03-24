@@ -22,10 +22,17 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
     backgroundColor: theme.palette.background.paper,
+  
   },
   typography: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(2)
   },
+
+  list: {
+    paddingTop: 0,
+    paddingBottom: 0
+  }
+
 }));
 
 
@@ -70,7 +77,7 @@ export default function SimpleList() {
   return (
     <div className={classes.root}>
       <Divider />
-      <List component="nav" aria-label="main mailbox folders">
+      <List className={classes.list} component="nav" aria-label="main mailbox folders">
 
         { files.map((file, key) => {
            const baseName = getBaseName(file.name)

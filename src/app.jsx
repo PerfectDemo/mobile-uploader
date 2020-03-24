@@ -11,6 +11,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import AddIcon from '@material-ui/icons/Add';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 
@@ -43,7 +44,11 @@ const useStyles = makeStyles(theme => ({
       toolBar: {
         paddingRight: theme.spacing(1)
       }
-  }));
+}));
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default function() {
 
@@ -88,6 +93,7 @@ export default function() {
             </Toolbar>
             </AppBar>
             <DirBreadCrumbs dir={currentDir}/>
+
             <SimpleList />
           
             <BottomNavigation className={classes.stickToBottom}
@@ -105,8 +111,9 @@ export default function() {
             <Snackbar
               open={snackBarOpen}
               onClose={snackHide}
-              message={snackMessage}
-            />
+            >
+               <Alert severity="info">{snackMessage}</Alert>
+            </Snackbar>
             
         </div>     
     )

@@ -86,22 +86,14 @@ class Qiniu {
         return jsonResult;
     }
 
-    async upload(file, key, putExtra, config) {
+    async upload(file, key, observer, putExtra, config) {
         const tokenRaw = await this._getUploadPolicy();
         const token = tokenRaw.token;
-        console.log('key:', key);
         let observable = qiniu.upload(file, key, token, putExtra, config);
 
-        let subscription = observable.subscribe(function(res) {
-            console.log('[RES]:', res);
-        }, function(error) {
-            console.error('[ERROR]', error);
-        }, function(res) {
-            console.log('[SUCCESS]:', res);
-        }) 
+        let subscription = observable.subscribe(observer);
         
-        // 这样传参形式也可以
-        // subscription.unsubscribe() // 上传取消
+        return subscription;
     }
 
     async readDir(dir) {

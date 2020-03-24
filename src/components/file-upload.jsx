@@ -9,6 +9,8 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 
 
 import { getFileExtension } from '../utils/file';
@@ -57,6 +59,33 @@ const KeyDialog = function(props) {
             </List>
         </Dialog>
     );
+};
+
+const useProgressStyles = makeStyles(theme => ({
+    progress: {
+      '& > * + *': {
+        marginTop: theme.spacing(2),
+      },
+    },
+  }));
+
+const ProgressDialog = function(props) {
+    const classes = useProgressStyles();
+    const { open, subscription, progress, cancel } = props;
+
+    return (
+        <Dialog maxWidth="lg" fullWidth={true} aria-labelledby="simple-dialog-title" open={open}>
+            <List>
+                <ListItem button>   
+                    <LinearProgress style={{ width: '100%' }} className={classes.progress} variant="determinate" value={ progress } />
+                    <Button style={{ marginLeft: '1rem' }}onClick={() => {
+                        subscription.unsubscribe();
+                        cancel();
+                    } } variant="contained">取消</Button>
+                </ListItem>
+            </List>
+        </Dialog>
+    );
 }
 
 const useStyles = makeStyles(() => ({
@@ -68,10 +97,15 @@ const useStyles = makeStyles(() => ({
 
 export default function FileUploader(props) {
     const classes = useStyles();
-    const { currentDir, readDir } = useContext(Context);
+    const { currentDir, readDir, snackShow } = useContext(Context);
     const [ file, setFile ] = useState({});
     const [ open, setOpen ] = useState(false);
     const [ defaultKey, setDefaultKey ] = useState('');
+
+    // progress
+    const [ progressOpen, setProgressOpen ] = useState(false);
+    const [ progress, setProgress ] = useState(0);
+    const [ subscription, setSubscription ] = useState(null);
 
 
     const handleUpload = (event) => {
@@ -85,9 +119,26 @@ export default function FileUploader(props) {
         // TODO: do upload
         setOpen(false);
         const fileName = currentDir + keyName;
-        console.log(fileName)
-        Qiniu.upload(file, fileName).then(() => setTimeout(() => readDir(), 1000));
-        
+        console.log(fileName);
+        setProgressOpen(true);
+     
+        Qiniu.upload(file, fileName, {
+            next(res) {
+                const percent = res.total.percent;
+                console.log(res.total.percent);
+                setProgress(percent | 0);
+            },
+            error(res) {
+
+            },
+            complete() {
+               readDir();
+               setProgressOpen(false);
+               snackShow('上传成功!');
+            }
+        }).then((subscription) => {
+           setSubscription(subscription);
+        });
     }
 
     const handleClose = (event) => {
@@ -102,5 +153,9 @@ export default function FileUploader(props) {
                 </IconButton>
             </label>
             <KeyDialog open={open} onClose={ handleClose } defaultKey={defaultKey} onSubmit={ handleSubmit }/>
+            <ProgressDialog open={progressOpen} subscription={subscription} progress={progress} cancel={()=> {
+                setProgressOpen(false);
+                snackShow('取消上传！');
+            }}/>
         </Fragment>
 }
