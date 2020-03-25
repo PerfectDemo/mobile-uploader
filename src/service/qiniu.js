@@ -3,7 +3,7 @@ import File from './file';
 import * as qiniu from 'qiniu-js';
 
 
-const getTimeStamp = () => (+new Date() / 1000).toFixed(0);
+const getTimeStamp = () => parseInt((+new Date() / 1000).toFixed(0));
 
 class Qiniu {
     constructor() {
@@ -14,11 +14,11 @@ class Qiniu {
 
     async _getUploadPolicy() {
         let localPolicy = localStorage.getItem('put-policy');
-
+    
         if (localPolicy) {
             const localPolicyObj = JSON.parse(localPolicy);
             if (localPolicyObj.timestamp > getTimeStamp()) {
-                return localPolicy;
+                return localPolicyObj;
             }
         } 
 
