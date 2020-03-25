@@ -59,7 +59,8 @@ export default function() {
 
       snackBarOpen,
       snackMessage,
-      snackHide 
+      snackHide,
+      snackType 
     } = useContext(Context);
 
     const [ open, setOpen ] = useState(false);
@@ -112,7 +113,7 @@ export default function() {
               open={snackBarOpen}
               onClose={snackHide}
             >
-               <Alert severity="info">{snackMessage}</Alert>
+               <Alert severity={snackType}>{snackMessage}</Alert>
             </Snackbar>
             
         </div>     

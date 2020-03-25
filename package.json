@@ -19,7 +19,8 @@
     "fecha": "^3.0.3",
     "qiniu-js": "^2.5.5",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "use-clipboard-copy": "^0.1.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

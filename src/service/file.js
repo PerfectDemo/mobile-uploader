@@ -3,6 +3,10 @@ class FileService {
         this.ossUrl = 'http://q6me6dnk1.bkt.clouddn.com/';
     }
 
+    getUrl(key) {
+        return this.ossUrl + key;
+    }
+
     async readDir(dir) {
         const result = await fetch(this.ossUrl + dir);
         const text = await result.text();

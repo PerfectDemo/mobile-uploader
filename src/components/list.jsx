@@ -65,9 +65,10 @@ export default function SimpleList() {
   const handleDelete = function() {
       Qiniu.delete(seletedFile.key).then(() => {
         setAnchorEl(null);
-        snackShow('删除成功!')
+        snackShow('删除成功!', 'success')
         readDir();
-      });
+      })
+      .catch(() => snackShow('删除失败!'));
   }
 
   const open = Boolean(anchorEl);

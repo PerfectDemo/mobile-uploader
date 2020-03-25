@@ -14,7 +14,8 @@ export const Provider = (props) => {
         snackBarOpen,
         snackShow,
         snackMessage,
-        snackHide
+        snackHide,
+        snackType
     } = useSnackBar();
 
     const context = {
@@ -26,7 +27,8 @@ export const Provider = (props) => {
         snackBarOpen,
         snackShow,
         snackMessage,
-        snackHide
+        snackHide,
+        snackType
     };
 
     return (

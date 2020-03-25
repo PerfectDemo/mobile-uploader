@@ -10,9 +10,14 @@ import Dialog from '@material-ui/core/Dialog';
 
 import { blue } from '@material-ui/core/colors';
 import Divider from '@material-ui/core/Divider';
+import { useClipboard } from 'use-clipboard-copy';
+
 
 import { convertSize } from '../utils/size';
 import { timeConvert } from '../utils/time';
+
+import File from '../service/file';
+import { Button } from '@material-ui/core';
 
 
 // overflow:hidden; //超出的文本隐藏
@@ -37,6 +42,9 @@ export default function DetailDialog(props) {
     const classes = useStyles();
     const { onClose, detail, open } = props;
     const { fsize, mimeType, putTime, key } = detail;
+    const url = File.getUrl(key);
+    const clipboard = useClipboard();
+
         
     return (
         <Dialog aria-labelledby="simple-dialog-title" open={open} onClose={onClose}>
@@ -54,6 +62,12 @@ export default function DetailDialog(props) {
                 </ListItem>
                 <ListItem button key={putTime}>
                     <ListItemText className={classes.listText} primary={`putTime: ${timeConvert(putTime / 10000000 | 0)}`} />
+                </ListItem>
+                <ListItem>
+                    <ListItemText className={classes.listText} primary={`url: ${url}`} />
+                </ListItem>
+                <ListItem style={{ display: 'flex', justifyContent:'center', alignItems: 'center'}}>
+                    <Button variant="outlined" onClick={()=> clipboard.copy(url) }>复制链接</Button>
                 </ListItem>
                
             </List>

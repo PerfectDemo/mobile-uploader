@@ -129,12 +129,12 @@ export default function FileUploader(props) {
                 setProgress(percent | 0);
             },
             error(res) {
-
+                snackShow('上传失败!', 'error');
             },
             complete() {
                readDir();
                setProgressOpen(false);
-               snackShow('上传成功!');
+               snackShow('上传成功!', 'success');
             }
         }).then((subscription) => {
            setSubscription(subscription);
