@@ -44,7 +44,9 @@ class FileService {
         a.download = fileName;
         a.href = blobUrl;
         a.click();
-        document.body.removeChild(a);
+
+        setTimeout(() => document.removeChild(a), 1500);
+       
     }
 }
 
