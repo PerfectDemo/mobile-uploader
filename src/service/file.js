@@ -1,3 +1,5 @@
+import { getBaseName } from '../utils/file';
+
 class FileService {
     constructor() {
         this.ossUrl = 'http://q6me6dnk1.bkt.clouddn.com/';
@@ -22,31 +24,19 @@ class FileService {
     }
 
     async downloadFile(file) {
-        const blob = await this.baseDownloadFileBlob(file);
-        this.downloadBlob(blob, file); 
-    }
-
-    async baseDownloadFileBlob(file) {
         const filePath = this.ossUrl + file;
-        const response = await fetch(filePath);
-        const blob = await response.blob();
-        return blob;
+        console.log('download file:', filePath);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.download = getBaseName(file);
+        a.href = filePath;
+        a.click();
+
+        setTimeout(() => document.removeChild(a), 1500);
     }
 
     getDownloadUrl(dir, file) {
         return this.ossUrl + dir + file;
-    }
-
-    downloadBlob(blob, fileName) {
-        const blobUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.download = fileName;
-        a.href = blobUrl;
-        a.click();
-
-        setTimeout(() => document.removeChild(a), 1500);
-       
     }
 }
 
