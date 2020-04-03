@@ -11,7 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
 import ImageIcon from '@material-ui/icons/Image';
 
-import File from '../service/file';
 import Qiniu from '../service/qiniu';
 import DetailDialog from './detail-dialog';
 import { getBaseName, getNearestDirName } from '../utils/file';
@@ -51,7 +50,7 @@ export default function SimpleList() {
   };
 
   const handleDownload = function() {
-     File.downloadFile(seletedFile.key).then(() => console.log('download!'));
+     Qiniu.download(seletedFile.key).then(() => console.log('download!'));
   };
 
   const handleDetail = function() {

@@ -1,6 +1,7 @@
 import CryptoJS  from "crypto-js";
 import File from './file';
 import * as qiniu from 'qiniu-js';
+import { getBaseName } from '../utils/file';
 
 
 const getTimeStamp = () => parseInt((+new Date() / 1000).toFixed(0));
@@ -98,7 +99,7 @@ class Qiniu {
     }
 
     async readDir(dir) {
-        // TODO: support marker
+        // support marker
         const query = {
             bucket: this.bucket,
             prefix: dir, 
@@ -126,6 +127,16 @@ class Qiniu {
             ts:  getTimeStamp()
         });
         return result;
+    }
+
+    async download(key) {
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = this.baseUrl + `/api/v1/download/${this.bucket}?key=${key}`;
+        a.download = getBaseName(key);
+        a.click();
+
+        setTimeout(() => document.removeChild(a), 1500);
     }
 
 
