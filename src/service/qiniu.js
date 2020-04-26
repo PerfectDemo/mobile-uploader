@@ -9,7 +9,7 @@ const getTimeStamp = () => parseInt((+new Date() / 1000).toFixed(0));
 class Qiniu {
     constructor() {
         // this.baseUrl = "http://127.0.0.1:3001";
-        this.baseUrl = 'http://service-h3q5nsf9-1301483451.sh.apigw.tencentcs.com/release';
+        this.baseUrl = 'http://service-h3q5nsf9-1301483451.sh.apigw.tencentcs.com/release/';
         this.bucket = "ninja-notebook";
 
     }
@@ -84,7 +84,7 @@ class Qiniu {
         const paramStr = Object.keys(paramObj).map(key => `${key}=${paramObj[key]}`).join('&');
         const response = await fetch(`${this.baseUrl}${api}?${paramStr}`);
         const jsonResult = await response.json();
-        jsonResult.url = File.getDownloadUrl(dir, file);
+        jsonResult.url = this.getDownloadUrl(dir, file);
         return jsonResult;
     }
 
@@ -137,6 +137,10 @@ class Qiniu {
         a.click();
 
         setTimeout(() => document.removeChild(a), 1500);
+    }
+
+    getDownloadUrl(key) {
+        return this.baseUrl + `/api/v1/download/${this.bucket}?key=${key}`;
     }
 
 

@@ -17,6 +17,7 @@ import { convertSize } from '../utils/size';
 import { timeConvert } from '../utils/time';
 
 import File from '../service/file';
+import Qiniu from '../service/qiniu';
 import { Button } from '@material-ui/core';
 
 
@@ -42,7 +43,7 @@ export default function DetailDialog(props) {
     const classes = useStyles();
     const { onClose, detail, open } = props;
     const { fsize, mimeType, putTime, key } = detail;
-    const url = File.getUrl(key);
+    const url = Qiniu.getDownloadUrl(key);
     const clipboard = useClipboard();
 
         
