@@ -9,7 +9,7 @@ const getTimeStamp = () => parseInt((+new Date() / 1000).toFixed(0));
 class Qiniu {
     constructor() {
         // this.baseUrl = "http://127.0.0.1:3001";
-        this.baseUrl = 'http://service-h3q5nsf9-1301483451.sh.apigw.tencentcs.com/release/';
+        this.baseUrl = 'http://service-h3q5nsf9-1301483451.sh.apigw.tencentcs.com/release';
         this.bucket = "ninja-notebook";
 
     }
