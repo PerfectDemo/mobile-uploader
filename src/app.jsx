@@ -13,12 +13,10 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import AddIcon from '@material-ui/icons/Add';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import BottomNavigation from '@material-ui/core/BottomNavigation';
 
 
 import SimpleList from './components/list';
 import DirBreadCrumbs from './components/dir-bread-crumbs';
-import FileUploader from './components/file-upload';
 import PopupMenu from './components/popup-menu';
 
 import { Context } from './context';

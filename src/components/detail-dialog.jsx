@@ -20,7 +20,7 @@ import { timeConvert } from '../utils/time';
 
 import File from '../service/file';
 import Qiniu from '../service/qiniu';
-import { Button, Divider } from '@material-ui/core';
+import { Button, Divider, Link } from '@material-ui/core';
 
 
 // overflow:hidden; //超出的文本隐藏
@@ -64,11 +64,15 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    width: '100%',
+    overflow: 'hidden'
   },
 
   url: {
     paddingLeft: '10px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
     whiteSpace: 'pre'
   }
 });
@@ -117,7 +121,7 @@ export default function DetailDialog(props) {
                 <Divider />
                 <ListItem  button key={url}  className={classes.listItem}>
                     <ListItemText  className={ classes.listText } primary={<Typography className={classes.listTextTitle}>URL</Typography>} />
-                    <ListItemText className={{...classes.listText, ...classes.url, ...classes.listTextContent}} primary={url} />
+                    <Link style={ { width: '100%' }} href={url} variant="body2"> {url} </Link>
                 </ListItem>
                 <Divider />
                 <ListItem className={classes.listItem} style={{ display: 'flex', justifyContent:'center', alignItems: 'center' }}>
