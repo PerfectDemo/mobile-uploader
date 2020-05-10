@@ -5,11 +5,13 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
 import ListItemText from '@material-ui/core/ListItemText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
-
+import CloseIcon from '@material-ui/icons/Close';
 import { blue } from '@material-ui/core/colors';
-import Divider from '@material-ui/core/Divider';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 import { useClipboard } from 'use-clipboard-copy';
 
 
@@ -18,7 +20,7 @@ import { timeConvert } from '../utils/time';
 
 import File from '../service/file';
 import Qiniu from '../service/qiniu';
-import { Button } from '@material-ui/core';
+import { Button, Divider } from '@material-ui/core';
 
 
 // overflow:hidden; //超出的文本隐藏
@@ -31,10 +33,43 @@ const useStyles = makeStyles({
     color: blue[600],
   },
 
+  title: {
+    flexGrow: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  appBar: {
+    position: 'relative',
+  },
+
   listText: {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap'
+  },
+
+  listTextTitle: {
+      fontWeight: 'bold',
+      fontSize: '1rem',
+  },
+
+  listTextContent: {
+    fontSize: '2rem',
+    paddingLeft: '10px'
+  },
+
+  listItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
+  },
+
+  url: {
+    paddingLeft: '10px',
+    whiteSpace: 'pre'
   }
 });
 
@@ -45,29 +80,47 @@ export default function DetailDialog(props) {
     const { fsize, mimeType, putTime, key } = detail;
     const url = Qiniu.getDownloadUrl(key);
     const clipboard = useClipboard();
-
-        
+    
     return (
-        <Dialog aria-labelledby="simple-dialog-title" open={open} onClose={onClose}>
-            <DialogTitle id="simple-dialog-title">Detail</DialogTitle>
-            <Divider/>
+        <Dialog fullScreen={true} aria-labelledby="simple-dialog-title" open={open}>
+            <AppBar className={classes.appBar}>
+              <Toolbar>
+                <IconButton edge="start" color="inherit" onClick={ onClose } aria-label="close">
+                  <CloseIcon />
+                </IconButton>
+                <Typography variant="h6" className={classes.title}>
+                  Detail
+                </Typography>
+                <div style={{ width: '2rem', height: '100%'}}></div>
+              </Toolbar>
+            </AppBar>
             <List>
-                <ListItem button key={key}>
-                    <ListItemText className={classes.listText} primary={`key: ${key}`} />
+                <ListItem button key={key} className={classes.listItem}>
+                    <ListItemText className={ classes.listText } primary={<Typography className={classes.listTextTitle}>KEY</Typography>} />
+                    <ListItemText className={`${classes.listText} ${classes.listTextContent}`} primary={`${key}`} />
                 </ListItem>
-                <ListItem button key={fsize}>
-                    <ListItemText className={classes.listText} primary={`size: ${convertSize(fsize)}`} />
+                <Divider />
+                <ListItem button key={fsize} className={classes.listItem}>
+                    <ListItemText className={ classes.listText } primary={<Typography className={classes.listTextTitle}>SIZE</Typography>} />
+                    <ListItemText  className={`${classes.listText} ${classes.listTextContent}`} primary={`${convertSize(fsize)}`} />
                 </ListItem>
-                <ListItem button key={mimeType}>
-                    <ListItemText className={classes.listText} primary={`mimeType: ${mimeType}`} />
+                <Divider />
+                <ListItem button key={mimeType} className={classes.listItem}>
+                    <ListItemText className={ classes.listText } primary={<Typography className={classes.listTextTitle}>MIMETYPE</Typography>} />
+                    <ListItemText className={`${classes.listText} ${classes.listTextContent}`} primary={mimeType} />
                 </ListItem>
-                <ListItem button key={putTime}>
-                    <ListItemText className={classes.listText} primary={`putTime: ${timeConvert(putTime / 10000000 | 0)}`} />
+                <Divider />
+                <ListItem button key={putTime} className={classes.listItem}>
+                    <ListItemText  className={ classes.listText } primary={<Typography className={classes.listTextTitle}>UPLOADTIME</Typography>} />
+                    <ListItemText  className={`${classes.listText} ${classes.listTextContent}`} primary={timeConvert(putTime / 10000000 | 0)} />
                 </ListItem>
-                <ListItem>
-                    <ListItemText className={classes.listText} primary={`url: ${url}`} />
+                <Divider />
+                <ListItem  button key={url}  className={classes.listItem}>
+                    <ListItemText  className={ classes.listText } primary={<Typography className={classes.listTextTitle}>URL</Typography>} />
+                    <ListItemText className={{...classes.listText, ...classes.url, ...classes.listTextContent}} primary={url} />
                 </ListItem>
-                <ListItem style={{ display: 'flex', justifyContent:'center', alignItems: 'center'}}>
+                <Divider />
+                <ListItem className={classes.listItem} style={{ display: 'flex', justifyContent:'center', alignItems: 'center' }}>
                     <Button variant="outlined" onClick={()=> clipboard.copy(url) }>复制链接</Button>
                 </ListItem>
                

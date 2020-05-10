@@ -1,7 +1,6 @@
 import React, { Fragment, useState, useContext, useEffect }from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import UploadIcon from '@material-ui/icons/CloudUpload';
+
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -10,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import LinearProgress from '@material-ui/core/LinearProgress';
-
+import Typography from '@material-ui/core/Typography';
 
 
 import { getFileExtension } from '../utils/file';
@@ -88,9 +87,12 @@ const ProgressDialog = function(props) {
     );
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
     input: {
       display: 'none',
+    },
+    typography: {
+        padding: theme.spacing(2),
     },
 }));
 
@@ -148,9 +150,7 @@ export default function FileUploader(props) {
     return <Fragment>
             <input type="file" id="file-upload" className={classes.input} onChange={(event) => handleUpload(event) }/>
             <label htmlFor="file-upload">
-                <IconButton color="primary" aria-label="upload picture" component="span">
-                    <UploadIcon />
-                </IconButton>
+                <Typography button className={classes.typography}>上传文件</Typography>
             </label>
             <KeyDialog open={open} onClose={ handleClose } defaultKey={defaultKey} onSubmit={ handleSubmit }/>
             <ProgressDialog open={progressOpen} subscription={subscription} progress={progress} cancel={()=> {

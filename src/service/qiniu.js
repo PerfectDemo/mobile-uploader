@@ -1,5 +1,4 @@
 import CryptoJS  from "crypto-js";
-import File from './file';
 import * as qiniu from 'qiniu-js';
 import { getBaseName } from '../utils/file';
 
@@ -20,6 +19,7 @@ class Qiniu {
         if (localPolicy) {
             const localPolicyObj = JSON.parse(localPolicy);
             if (localPolicyObj.timestamp > getTimeStamp()) {
+                console.log(localPolicyObj.timestamp,  getTimeStamp());
                 return localPolicyObj;
             }
         } 

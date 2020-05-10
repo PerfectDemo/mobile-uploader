@@ -9,6 +9,8 @@ import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 
+import FileUploader from './file-upload';
+
 import Qiniu from '../service/qiniu';
 
 const useStyles = makeStyles(theme => ({
@@ -82,5 +84,6 @@ export default function PopupMenu (props) {
             >
             <Typography button className={classes.typography} onClick={ ()=> setDialogOpen(true) }>新建文件夹</Typography>
             <DirDialog open={dialogOpen} onClose={()=> setDialogOpen(false) } onSubmit={ createDir } />
+            <FileUploader />
         </Popover>
 }

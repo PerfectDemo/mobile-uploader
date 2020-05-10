@@ -96,17 +96,6 @@ export default function() {
             <DirBreadCrumbs dir={currentDir}/>
 
             <SimpleList />
-          
-            <BottomNavigation className={classes.stickToBottom}
-                // value={value}
-                // onChange={(event, newValue) => {
-                //     alert('xiba');
-                // }}
-                // showLabels
-                // className={classes.root}
-                >
-                <FileUploader />
-            </BottomNavigation>
 
             <PopupMenu open={open} anchorEl={popupAnchorEl} currentDir={currentDir} onClose={() => setOpen(false) }/>
             <Snackbar
