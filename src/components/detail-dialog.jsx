@@ -82,7 +82,8 @@ export default function DetailDialog(props) {
     const classes = useStyles();
     const { onClose, detail, open } = props;
     const { fsize, mimeType, putTime, key } = detail;
-    const url = Qiniu.getDownloadUrl(key);
+    const url = Qiniu.getDownloadUrl(key, false);
+    const preview =  Qiniu.getDownloadUrl(key, true);
     const clipboard = useClipboard();
     
     return (
@@ -121,11 +122,11 @@ export default function DetailDialog(props) {
                 <Divider />
                 <ListItem  button key={url}  className={classes.listItem}>
                     <ListItemText  className={ classes.listText } primary={<Typography className={classes.listTextTitle}>URL</Typography>} />
-                    <Link style={ { width: '100%' }} href={url} variant="body2"> {url + '&preview=1'} </Link>
+                    <Link style={ { width: '100%' }} href={preview} variant="body2"> {preview} </Link>
                 </ListItem>
                 <Divider />
                 <ListItem className={classes.listItem} style={{ display: 'flex', justifyContent:'center', alignItems: 'center' }}>
-                    <Button variant="outlined" onClick={()=> clipboard.copy(url + '&preview=1') }>复制链接</Button>
+                    <Button variant="outlined" onClick={()=> clipboard.copy(preview) }>复制链接</Button>
                 </ListItem>
                
             </List>
